@@ -79,13 +79,15 @@ resource "aws_security_group" "ecs_api" {
   })
 }
 
-# Allow inbound HTTP traffic to FastAPI
+# Optionally allow direct access from a trusted IPv4 CIDR.
 resource "aws_vpc_security_group_ingress_rule" "ecs_api_http" {
+  count = var.api_ingress_cidr == null ? 0 : 1
+
   security_group_id = aws_security_group.ecs_api.id
 
-  cidr_ipv4   = "0.0.0.0/0"
-  from_port   = 8000
-  to_port     = 8000
+  cidr_ipv4   = var.api_ingress_cidr
+  from_port   = local.api_port
+  to_port     = local.api_port
   ip_protocol = "tcp"
 
   description = "Allow HTTP traffic to CareerFlow API"

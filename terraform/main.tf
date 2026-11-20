@@ -1,5 +1,6 @@
 locals {
   project_name = "cloudforge"
+  api_port     = 8000
 
   common_tags = {
     Project     = local.project_name
